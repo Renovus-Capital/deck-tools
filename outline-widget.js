@@ -254,7 +254,7 @@ document.getElementById('outline').addEventListener('click', (e) => {
   const idx = card ? +card.dataset.idx : -1;
   const slide = idx >= 0 ? SPEC.slides[idx] : null;
   const a = act.dataset.act;
-  if (a === 'pick-layout') return openPicker(idx);
+if (a === 'pick-layout') {     const wasOpen = card && card.querySelector('.layout-dropdown');     closePicker();     if (wasOpen) return;     return openPicker(idx);   }
   if (a === 'del')         { _snapshot(); SPEC.slides.splice(idx, 1); return render(); }
   if (a === 'insert') {
     _snapshot();
