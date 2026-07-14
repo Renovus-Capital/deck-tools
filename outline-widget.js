@@ -82,8 +82,8 @@ function renderListItems(items, slideIdx, field, listType, mark, addLabel) {
   return `<textarea class="list-box" data-bind="list-block" data-slide="${slideIdx}" data-field="${field}" data-list-type="${listType}" data-mark="${mark}" rows="${Math.max(items.length, 1)}" placeholder="${mark} one per line…" spellcheck="false">${esc(text)}</textarea>`;
 }
 function renderSections(sections, slideIdx) {
-  const text = (sections || []).join('\n');
-  return `<textarea class="list-box" data-bind="sections-block" data-slide="${slideIdx}" rows="${Math.max((sections || []).length, 1)}" placeholder="one section per line (max 6) — numbered automatically…" spellcheck="false">${esc(text)}</textarea>`;
+  const text = (sections || []).map((sec, i) => (i + 1) + '. ' + sec).join('\n');
+  return `<textarea class="list-box" data-bind="sections-block" data-slide="${slideIdx}" rows="${Math.max((sections || []).length, 1)}" placeholder="1. First section — one per line (max 6)…" spellcheck="false">${esc(text)}</textarea>`;
 }
 function renderStats(stats, slideIdx) {
   const text = Object.entries(stats || {}).map(([k, v]) => k + ': ' + String(v ?? '')).join('\n');
@@ -206,7 +206,7 @@ document.getElementById('outline').addEventListener('input', (e) => {
   }
   if (bind === 'sections-block') {
     slide.sections = t.value.split('\n')
-      .map(l => l.trim())
+      .map(l => l.replace(/^\s*\d+\s*[.)]?\s*/, '').trim())
       .filter((l, i, arr) => l.length || i < arr.length - 1);
     fitBox(t);
     return;
